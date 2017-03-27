@@ -1,5 +1,5 @@
 import React from 'react';
-import update from 'react-addons-update'
+import update from 'react-addons-update';
 import ReactDOM from 'react-dom';
 import { Button,Modal } from 'react-bootstrap';
 import { Tab,Col,Row,Nav,NavItem,Accordion,Panel } from 'react-bootstrap';

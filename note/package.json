@@ -1,19 +1,15 @@
 {
-  "name": "note-app",
+  "name": "note",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "babel-preset-stage-0": "^6.22.0",
     "react": "^15.4.2",
     "react-addons-update": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
-    "react-hot-loader": "^1.3.1",
-    "react-scripts": "0.9.5",
-    "webpack": "^2.3.2",
-    "webpack-dev-server": "^2.4.2"
+    "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/App';
 import Sidebar from './components/Sidebar';
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<Sidebar />, rootElement);
+ReactDOM.render(<App />, rootElement);
 
+if (module.hot) {
+  module.hot.accept();
+}
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 // import App from './components/App';
