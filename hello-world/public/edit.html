@@ -32,12 +32,6 @@
     .jb-center {
       text-align: center;
     }
-    .fancy {
-      width: 500px;
-      margin: 150px auto;
-      padding: 50px;
-      border-width: 10px;
-    }
   </style>
 </head>
 <body>
@@ -101,8 +95,8 @@
           <font color=black size=2>&nbsp;&nbsp;&nbsp;&nbsp;목요일 11시~12시, 1시~3시</font>
         </div>
         <div class="col-md-2" align="right">
-          <button class="btn btn-primary btn-xs">EDIT</button>
-          <button class="btn btn-danger btn-xs">DEL</button>
+          <a class="btn btn-primary btn-xs">EDIT</a>
+          <a class="btn btn-danger btn-xs">DEL</a>
         </div>
       </div>
         <hr style="border: solid 1px black;">
@@ -111,14 +105,14 @@
             <font color=black size=4>1주차</font>
             <font color=black size=2>&nbsp;&nbsp;&nbsp;&nbsp;2017.03.26</font>
           </div>
-          <div class="col-md-2" align="right">
-            <a class="btn btn-primary btn-xs" href="edit.html">EDIT</a>
-        </div>
       </div>
       <br>
-      <form class="form-horizontal fancy">
-
-      </form>
+      <textarea class="form-control" rows="17"></textarea>
+      <br>
+      <div class="col" align="right">
+        <a class="btn btn-primary btn-md" href="main.html">SAVE</a>
+        <a class="btn btn-danger btn-md" href="main.html">EXIT</a>
+      </div>
       <div class="jb-center">
         <ul class="pagination">
           <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
@@ -134,4 +128,3 @@
   </div>
 </body>
 </html>
-<!-- <textarea class="form-control" rows="15"></textarea> -->

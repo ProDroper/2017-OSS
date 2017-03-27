@@ -1,9 +1,9 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import Sidebar from './components/Sidebar';
-//
-// const rootElement = document.getElementById('root');
-// ReactDOM.render(<Sidebar />, rootElement);
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Sidebar from './components/Sidebar';
+
+const rootElement = document.getElementById('root');
+ReactDOM.render(<Sidebar />, rootElement);
 
 // import React from 'react';
 // import ReactDOM from 'react-dom';

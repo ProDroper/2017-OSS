@@ -1,12 +1,12 @@
 {
-  "name": "hello-world",
+  "name": "note-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "jquery": "^3.2.1",
-    "react-addons-css-transition-group": "^15.4.2",
-    "react-addons-transition-group": "^15.4.2",
-    "reactstrap": "^4.3.0"
+    "react": "^15.4.2",
+    "react-addons-update": "^15.4.2",
+    "react-bootstrap": "^0.30.8",
+    "react-dom": "^15.4.2"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
