@@ -12,6 +12,7 @@ export default class MemoInfo extends React.Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleToggle(){
@@ -35,7 +36,13 @@ export default class MemoInfo extends React.Component {
   }
 
   handleEdit(){
-    this.props.onEdit(this.state.contents, this.state.contents);
+    this.props.onEdit(this.state.title, this.state.contents);
+  }
+
+  handleKeyPress(e) {
+    if(e.charCode === 13) {
+      this.handleToggle();
+    }
   }
 
   render() {
@@ -78,9 +85,9 @@ export default class MemoInfo extends React.Component {
                       type="text"
                       label="contents"
                       placeholder="Contents"
-                      componentClass="textarea"
                       value={this.state.contents}
                       onChange={this.handleChange}
+                      onKeyPress={this.handleKeyPress}
                     />
                   </Col>
               </FormGroup>
@@ -90,12 +97,17 @@ export default class MemoInfo extends React.Component {
       </div>
     )
     const view = this.state.isEdit ? edit : details;
+    const submitedit =
+      this.state.isEdit ? <Button bsStyle="primary" onClick={this.handleToggle}>Submit</Button> :
+      <Button bsStyle="warning" onClick={this.handleToggle}>Edit</Button>;
+
     return (
-      <div onClick={this.props.onClick}>
+      <div className="well" style={wellStyles} onClick={this.props.onClick} >
         {view}
-        <button onClick={this.handleToggle}>
-        {this.state.isEdit ? 'OK' : 'Edit'}</button>
-        <button onClick={this.props.onRemove}>Remove</button>
+        <ButtonGroup>
+        {submitedit}
+        <Button bsStyle="danger" onClick={this.props.onRemove}>Remove</Button>
+        </ButtonGroup>
       </div>
     );
   }

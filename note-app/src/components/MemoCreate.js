@@ -10,6 +10,7 @@ export default class MemoCreate extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleChange(e) {
@@ -28,7 +29,12 @@ export default class MemoCreate extends React.Component {
       title: '',
       contents: ''
     });
-    this.nameInput.focus();
+  }
+
+  handleKeyPress(e) {
+    if(e.charCode === 13) {
+      this.handleClick();
+    }
   }
 
   render() {
@@ -58,7 +64,6 @@ export default class MemoCreate extends React.Component {
                     placeholder="Title"
                     value={this.state.title}
                     onChange={this.handleChange}
-                    ref={(ref) => { this.nameInput = ref }}
                   />
                 </Col>
               </FormGroup>
@@ -72,9 +77,9 @@ export default class MemoCreate extends React.Component {
                       type="text"
                       label="contents"
                       placeholder="Contents"
-                      componentClass="textarea"
                       value={this.state.contents}
                       onChange={this.handleChange}
+                      onKeyPress={this.handleKeyPress}
                     />
                   </Col>
               </FormGroup>

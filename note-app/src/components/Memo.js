@@ -13,13 +13,7 @@ export default class Memo extends React.Component {
     this.state = {
       selectedKey : -1,
       keyword: '',
-      memoData: [{
-        title: '1주차 강의노트',
-        contents: '너무 재밌다'
-      }, {
-        title: '2주차 강의노트',
-        contents: '정말 짱이다'
-      }]
+      memoData: []
     };
       this.handleChange = this.handleChange.bind(this);
       this.handleClick = this.handleClick.bind(this);
@@ -27,7 +21,22 @@ export default class Memo extends React.Component {
       this.handleRemove = this.handleRemove.bind(this);
       this.handleEdit = this.handleEdit.bind(this);
     }
+/*
+    componentWillMount(){
+      const memoData = localStorage.memoData;
+      if(memoData){
+        this.setState({
+          memoData: JSON.parse(memoData)
+        });
+      }
+    }
 
+    componentDidUpdate(prevProps, prevState){
+      if(JSON.stringify(prevState.memoData) != JSON.stringify(this.state.memoData)) {
+        localStorage.memoData = JSON.stringify(this.state.memoData);
+      }
+    }
+*/
     handleChange(e){
       this.setState({
         keyword: e.target.value
