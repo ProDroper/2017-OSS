@@ -1,7 +1,7 @@
 import React from 'react';
 import Memo from './Memo';
 import Calendar from './Calendar';
-import { Form,ControlLabel,Checkbox,Button,ButtonGroup,ListGroup,ListGroupItem,Tab,Row,Col,Accordion,Panel,Nav,NavItem,FormGroup,FormControl,PageHeader } from 'react-bootstrap';
+import { wellStyles,Form,ControlLabel,Checkbox,Button,ButtonGroup,ListGroup,ListGroupItem,Tab,Row,Col,Accordion,Panel,Nav,NavItem,FormGroup,FormControl,PageHeader } from 'react-bootstrap';
 
 class App extends React.Component {
   constructor(props){
@@ -10,6 +10,7 @@ class App extends React.Component {
       isLogin : false
     };
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login(e) {
@@ -18,40 +19,60 @@ class App extends React.Component {
     });
   }
 
+  logout(e) {
+    this.setState({
+      isLogin : false
+    });
+  }
+
   render(){
+    const CalloutStyle = {
+      height: 180
+    };
     const formInstance = (
       <div>
-        <Form horizontal>
-          <FormGroup>
-            <Col componentClass={ControlLabel} sm={2}>
-              아이디
-            </Col>
-            <Col sm={10}>
-              <FormControl type="text" placeholder="ID" />
-            </Col>
-          </FormGroup>
+        <div style={CalloutStyle}>
+        </div>
+        <div>
+          <Col smOffset={3} sm={6}>
+            <h3> 강의노트 로그인 </h3>
+            <div className="well" style={wellStyles}>
+              <Row className="show-grid">
+                <Form horizontal>
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={2} smOffset={2}>
+                      아이디
+                    </Col>
+                    <Col sm={6}>
+                      <FormControl type="text" placeholder="ID" />
+                    </Col>
+                  </FormGroup>
 
-          <FormGroup>
-            <Col componentClass={ControlLabel} sm={2}>
-              비밀번호
-            </Col>
-            <Col sm={10}>
-              <FormControl type="password" placeholder="Password" />
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Checkbox>Remember me</Checkbox>
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit" onClick={this.login}>
-                Sign in
-              </Button>
-            </Col>
-          </FormGroup>
-        </Form>
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={2} smOffset={2}>
+                      비밀번호
+                    </Col>
+                    <Col sm={6}>
+                      <FormControl type="password" placeholder="Password" />
+                    </Col>
+                  </FormGroup>
+                  <FormGroup>
+                    <Col smOffset={7} sm={4}>
+                      <ButtonGroup>
+                        <Button type="submit" onClick={this.login}>
+                          로그인
+                        </Button>
+                        <Button type="submit" onClick={this.login}>
+                          회원가입
+                        </Button>
+                      </ButtonGroup>
+                    </Col>
+                  </FormGroup>
+                </Form>
+              </Row>
+            </div>
+          </Col>
+        </div>
       </div>
     );
 
@@ -128,7 +149,7 @@ class App extends React.Component {
                   <Row>
                     <PageHeader>로그아웃</PageHeader>
                   </Row>
-                  <Button bsStyle="danger">로그아웃</Button>
+                  <Button bsStyle="danger" onClick={this.logout}>로그아웃</Button>
                 </Tab.Pane>
                 <Tab.Pane eventKey="2016/2/1">
                   <Row>
@@ -171,7 +192,7 @@ class App extends React.Component {
     )
     return (
       <div>
-        {view};
+        {view}
       </div>
     );
   }
