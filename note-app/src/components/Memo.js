@@ -87,7 +87,7 @@ export default class Memo extends React.Component {
             return memo.title.toLowerCase().indexOf(this.state.keyword) > -1;
           }
         );
-        return data.map((memo, i) => {
+        return data.reverse().map((memo, i) => {
           return (<MemoInfo
             memo={memo}
             key={i}
@@ -107,7 +107,6 @@ export default class Memo extends React.Component {
             type="text"
             placeholder="Search"
             name="keyword"
-            placeholder="Search"
             value={this.state.keyword}
             onChange={this.handleChange}
           />

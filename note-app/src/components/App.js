@@ -3,13 +3,13 @@ import Memo from './Memo';
 import Calendar from './Calendar';
 import ReactCountdownClock from 'react-countdown-clock';
 
-import { ButtonToolbar,FieldGroup,wellStyles,Form,ControlLabel,Checkbox,Button,ButtonGroup,ListGroup,ListGroupItem,Tab,Row,Col,Accordion,Panel,Nav,NavItem,FormGroup,FormControl,PageHeader } from 'react-bootstrap';
+import { wellStyles,Form,ControlLabel,Button,ButtonGroup,ListGroup,ListGroupItem,Tab,Row,Col,Accordion,Panel,Nav,NavItem,FormGroup,FormControl,PageHeader } from 'react-bootstrap';
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      isLogin : true,
+      isLogin : false,
       isJoinus : false,
       isTimer : true
     };
