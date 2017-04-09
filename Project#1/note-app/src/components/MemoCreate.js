@@ -7,6 +7,7 @@ export default class MemoCreate extends React.Component {
     super(props);
     this.state = {
       title: '',
+      date: '',
       contents: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -23,11 +24,13 @@ export default class MemoCreate extends React.Component {
   handleClick() {
     const memo = {
       title: this.state.title,
+      date: this.state.date,
       contents: this.state.contents
     };
     this.props.onCreate(memo);
     this.setState({
       title: '',
+      date: '',
       contents: ''
     });
     ReactDOM.findDOMNode(this.titleInput).focus();
@@ -46,17 +49,29 @@ export default class MemoCreate extends React.Component {
           <Form horizontal>
             <FormGroup >
               <Col componentClass={ControlLabel} sm={2}>
-                Title
+              Title
               </Col>
-              <Col sm={10}>
+              <Col sm={5}>
                 <FormControl
-                  name="title"
-                  type="text"
-                  label="title"
-                  placeholder="Title"
-                  value={this.state.title}
-                  onChange={this.handleChange}
-                  ref={(input) => { this.titleInput=input; }} />
+                    name="title"
+                    type="text"
+                    label="title"
+                    placeholder="Title"
+                    value={this.state.title}
+                    onChange={this.handleChange}
+                    ref={(input) => { this.titleInput=input; }} />
+              </Col>
+              <Col componentClass={ControlLabel} sm={1}>
+                Date
+              </Col>
+              <Col sm={4}>
+                <FormControl
+                    name="date"
+                    type="text"
+                    label="date"
+                    placeholder="YY.MM.DD"
+                    value={this.state.date}
+                    onChange={this.handleChange} />
               </Col>
             </FormGroup>
             <FormGroup>

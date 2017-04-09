@@ -13,7 +13,7 @@ export default class Memo extends React.Component {
     this.state = {
       selectedKey : -1,
       keyword: '',
-      memoData: []
+      memoData2: []
     };
       this.handleChange = this.handleChange.bind(this);
       this.handleClick = this.handleClick.bind(this);
@@ -21,22 +21,22 @@ export default class Memo extends React.Component {
       this.handleRemove = this.handleRemove.bind(this);
       this.handleEdit = this.handleEdit.bind(this);
     }
-/*
+
     componentWillMount(){
-      const memoData = localStorage.memoData;
-      if(memoData){
+      const memoData2 = localStorage.memoData2;
+      if(memoData2){
         this.setState({
-          memoData: JSON.parse(memoData)
+          memoData2: JSON.parse(memoData2)
         });
       }
     }
 
     componentDidUpdate(prevProps, prevState){
-      if(JSON.stringify(prevState.memoData) != JSON.stringify(this.state.memoData)) {
-        localStorage.memoData = JSON.stringify(this.state.memoData);
+      if(JSON.stringify(prevState.memoData2) !== JSON.stringify(this.state.memoData2)) {
+        localStorage.memoData2 = JSON.stringify(this.state.memoData2);
       }
     }
-*/
+
     handleChange(e){
       this.setState({
         keyword: e.target.value
@@ -51,7 +51,7 @@ export default class Memo extends React.Component {
 
     handleCreate(memo){
       this.setState({
-        memoData: update(this.state.memoData, { $push: [memo] })
+        memoData2: update(this.state.memoData2, { $push: [memo] })
       });
     }
 
@@ -60,19 +60,20 @@ export default class Memo extends React.Component {
         return;
       }
       this.setState({
-        memoData: update(this.state.memoData,
+        memoData2: update(this.state.memoData2,
           { $splice: [[this.state.selectedKey, 1]] }
         ),
         selectedKey: -1
       });
     }
 
-    handleEdit(title, contents){
+    handleEdit(title, date, contents){
       this.setState({
-        memoData: update(this.state.memoData,
+        memoData2: update(this.state.memoData2,
           {
             [this.state.selectedKey] : {
               title: { $set: title },
+              date: { $set: date },
               contents: { $set: contents }
             }
           })
@@ -87,13 +88,14 @@ export default class Memo extends React.Component {
             return memo.title.toLowerCase().indexOf(this.state.keyword) > -1;
           }
         );
-        return data.reverse().map((memo, i) => {
+        return data.map((memo, i) => {
           return (<MemoInfo
             memo={memo}
             key={i}
             onRemove={this.handleRemove}
             onEdit={this.handleEdit}
-            onClick={() => this.handleClick(i)}/>);
+            onClick={() => this.handleClick(i)}/>
+          );
         });
       };
 
@@ -105,13 +107,13 @@ export default class Memo extends React.Component {
         <FormGroup bsSize="xs">
           <FormControl
             type="text"
-            placeholder="Search"
+            placeholder="Title Search"
             name="keyword"
             value={this.state.keyword}
             onChange={this.handleChange}
           />
         </FormGroup>
-        <div>{mapToComponents(this.state.memoData)}</div>
+        <div>{mapToComponents(this.state.memoData2)}</div>
       </div>
     );
   }

@@ -7,6 +7,7 @@ export default class MemoInfo extends React.Component {
     this.state = {
       isEdit : false,
       title: '',
+      date: '',
       contents: ''
     };
     this.handleToggle = this.handleToggle.bind(this);
@@ -19,6 +20,7 @@ export default class MemoInfo extends React.Component {
     if(!this.state.isEdit) {
       this.setState({
         title: this.props.memo.title,
+        date: this.props.memo.date,
         contents: this.props.memo.contents
       });
     } else {
@@ -36,7 +38,7 @@ export default class MemoInfo extends React.Component {
   }
 
   handleEdit(){
-    this.props.onEdit(this.state.title, this.state.contents);
+    this.props.onEdit(this.state.title, this.state.date, this.state.contents);
   }
 
   handleKeyPress(e) {
@@ -47,12 +49,17 @@ export default class MemoInfo extends React.Component {
 
   render() {
     const title = (
-      <h3>{this.props.memo.title}</h3>
+      <div>
+        <h3>{this.props.memo.title}</h3>
+        <h6>{this.props.memo.date}</h6>
+      </div>
     );
     const details = (
       <div>
         <Panel header={title}>
+          <p>
           {this.props.memo.contents}
+          </p>
         </Panel>
       </div>);
     const edit = (
@@ -60,27 +67,39 @@ export default class MemoInfo extends React.Component {
         <p>
           <div className="well" style={wellStyles}>
             <Form horizontal>
-              <FormGroup>
+              <FormGroup >
                 <Col componentClass={ControlLabel} sm={2}>
                   Title
                 </Col>
-                <Col sm={10}>
+                <Col sm={5}>
                   <FormControl
-                    name="title"
-                    type="text"
-                    label="title"
-                    placeholder="Title"
-                    value={this.state.title}
-                    onChange={this.handleChange}
-                  />
+                      name="title"
+                      type="text"
+                      label="title"
+                      placeholder="Title"
+                      value={this.state.title}
+                      onChange={this.handleChange}
+                      ref={(input) => { this.titleInput=input; }} />
+                </Col>
+                <Col componentClass={ControlLabel} sm={1}>
+                  Date
+                </Col>
+                <Col sm={4}>
+                  <FormControl
+                      name="date"
+                      type="text"
+                      label="date"
+                      placeholder="YY.MM.DD"
+                      value={this.state.date}
+                      onChange={this.handleChange} />
                 </Col>
               </FormGroup>
               <FormGroup>
                 <Col componentClass={ControlLabel} sm={2}>
                   Contents
                 </Col>
-                  <Col sm={10}>
-                    <FormControl
+                <Col sm={10}>
+                  <FormControl
                       name="contents"
                       type="text"
                       label="contents"
@@ -88,8 +107,8 @@ export default class MemoInfo extends React.Component {
                       value={this.state.contents}
                       onChange={this.handleChange}
                       onKeyPress={this.handleKeyPress}
-                    />
-                  </Col>
+                  />
+                </Col>
               </FormGroup>
             </Form>
           </div>

@@ -21,7 +21,7 @@ export default class Memo extends React.Component {
       this.handleRemove = this.handleRemove.bind(this);
       this.handleEdit = this.handleEdit.bind(this);
     }
-/*
+
     componentWillMount(){
       const memoData = localStorage.memoData;
       if(memoData){
@@ -32,11 +32,11 @@ export default class Memo extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-      if(JSON.stringify(prevState.memoData) != JSON.stringify(this.state.memoData)) {
+      if(JSON.stringify(prevState.memoData) !== JSON.stringify(this.state.memoData)) {
         localStorage.memoData = JSON.stringify(this.state.memoData);
       }
     }
-*/
+
     handleChange(e){
       this.setState({
         keyword: e.target.value
@@ -67,12 +67,13 @@ export default class Memo extends React.Component {
       });
     }
 
-    handleEdit(title, contents){
+    handleEdit(title, date, contents){
       this.setState({
         memoData: update(this.state.memoData,
           {
             [this.state.selectedKey] : {
               title: { $set: title },
+              date: { $set: date },
               contents: { $set: contents }
             }
           })
@@ -87,13 +88,14 @@ export default class Memo extends React.Component {
             return memo.title.toLowerCase().indexOf(this.state.keyword) > -1;
           }
         );
-        return data.reverse().map((memo, i) => {
+        return data.map((memo, i) => {
           return (<MemoInfo
             memo={memo}
             key={i}
             onRemove={this.handleRemove}
             onEdit={this.handleEdit}
-            onClick={() => this.handleClick(i)}/>);
+            onClick={() => this.handleClick(i)}/>
+          );
         });
       };
 
@@ -105,7 +107,7 @@ export default class Memo extends React.Component {
         <FormGroup bsSize="xs">
           <FormControl
             type="text"
-            placeholder="Search"
+            placeholder="Title Search"
             name="keyword"
             value={this.state.keyword}
             onChange={this.handleChange}
