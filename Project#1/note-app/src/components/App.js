@@ -186,6 +186,9 @@ class App extends React.Component {
         const margin = {
             margin: 1
         };
+        const all = {
+            height: 200
+        };
         const joinusform = (
             <div>
               <div style={joinus}>
@@ -373,6 +376,7 @@ class App extends React.Component {
                                     </Nav>
                                 </Panel>
                             </Accordion>
+                            <div style={all}/>
                         </Col>
                         <Col sm={10}>
                             <Tab.Content animation>
