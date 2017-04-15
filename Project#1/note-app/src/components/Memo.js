@@ -44,8 +44,9 @@ export default class Memo extends React.Component {
     }
 
     handleClick(key){
+        console.log('click');
       this.setState({
-        selectedKey : key
+        selectedKey : key,
       });
     }
 
@@ -56,6 +57,7 @@ export default class Memo extends React.Component {
     }
 
     handleRemove(){
+        console.log('remove');
       if(this.state.selectedKey < 0){
         return;
       }

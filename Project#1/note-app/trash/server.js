@@ -21,6 +21,7 @@ app.get('/man', (req, res) =>{
         res.send(rows);
     });
 });
+
 const server = app.listen(port, () => {
     console.log('Express listening on port', port);
 });
