@@ -14,9 +14,12 @@
 
 추가적으로 기능이 추가될수록 가산점을 얻습니다.
 
-## Quick Start
 
+## Quick Start
+```sh
 Clone and run the [`./node_modules/.bin/electron .`](https://github.com/hellogaon/2017-OSS/)
+```
+
 
 기본 기능
 * 메모 휘발성 X
