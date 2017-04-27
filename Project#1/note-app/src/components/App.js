@@ -46,6 +46,7 @@ class App extends React.Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.getInital = this.getInital.bind(this);
         this.changecolor = this.changecolor.bind(this);
+
     }
 
     getInital(){
@@ -75,7 +76,6 @@ class App extends React.Component {
                 })
         });
     }
-
 
     handleChange(e) {
         let nextState = {};
@@ -137,6 +137,9 @@ class App extends React.Component {
                     })
                 );
             }
+            return (
+                alert("아이디 또는 비밀번호가 존재하지 않습니다")
+            );
         });
     }
 
