@@ -22,18 +22,23 @@ export default class MemoCreate extends React.Component {
   }
 
   handleClick() {
-    const memo = {
-      title: this.state.title,
-      date: this.state.date,
-      contents: this.state.contents
-    };
-    this.props.onCreate(memo);
-    this.setState({
-      title: '',
-      date: '',
-      contents: ''
-    });
-    ReactDOM.findDOMNode(this.titleInput).focus();
+    if(this.state.title !== '' && this.state.date !== '' && this.state.contents !== '') {
+        const memo = {
+            title: this.state.title,
+            date: this.state.date,
+            contents: this.state.contents
+        };
+        this.props.onCreate(memo);
+        this.setState({
+            title: '',
+            date: '',
+            contents: ''
+        });
+        ReactDOM.findDOMNode(this.titleInput).focus();
+    }
+    else {
+      alert("비어있는 입력 칸이 존재합니다.")
+    }
   }
 
   handleKeyPress(e) {

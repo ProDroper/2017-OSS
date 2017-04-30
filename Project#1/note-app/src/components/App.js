@@ -1,6 +1,9 @@
 import React from 'react';
 import Memo from './Memo';
 import Memo2 from './Memo2';
+import Memo3 from './Memo3';
+import Memo4 from './Memo4';
+import Memo5 from './Memo5';
 import Calendar from './Calendar';
 import ReactCountdownClock from 'react-countdown-clock';
 import AnalogClock, { Themes } from 'react-analog-clock';
@@ -90,26 +93,31 @@ class App extends React.Component {
     }
 
     handleClick() {
-        const member = {
-            id: this.state.id,
-            pw: this.state.pw,
-            name: this.state.name,
-            sch: this.state.sch,
-            study: this.state.study,
-            num: this.state.num
-        };
-        this.handleCreate(member);
-        this.setState({
-            id: '',
-            pw: '',
-            name: '',
-            sch: '',
-            study: '',
-            num: ''
-        });
-        this.setState({
-            isJoinus : false
-        });
+        if(this.state.mypw.length < 6) {
+            alert("비밀번호가 너무 짧습니다.");
+        }
+        else {
+            const member = {
+                id: this.state.id,
+                pw: this.state.pw,
+                name: this.state.name,
+                sch: this.state.sch,
+                study: this.state.study,
+                num: this.state.num
+            };
+            this.handleCreate(member);
+            this.setState({
+                id: '',
+                pw: '',
+                name: '',
+                sch: '',
+                study: '',
+                num: ''
+            });
+            this.setState({
+                isJoinus: false
+            });
+        }
     }
     componentWillMount(){
         const memberdata = localStorage.memberdata;
@@ -215,7 +223,7 @@ class App extends React.Component {
                             비밀번호
                           </Col>
                           <Col sm={6}>
-                            <FormControl type="password" placeholder="비밀번호" name="pw" value={this.state.pw} onChange={this.handleChange} />
+                            <FormControl type="password" placeholder="비밀번호 (6자리 이상)" name="pw" value={this.state.pw} onChange={this.handleChange} />
                           </Col>
                         </FormGroup>
                         <FormGroup>
@@ -516,7 +524,7 @@ class App extends React.Component {
                                         <PageHeader>프로그래밍설계방법론<small>&nbsp;&nbsp;&nbsp;&nbsp;김광교수님</small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
-
+                                        <Memo3/>
                                     </Col>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2017/1/1">
@@ -524,7 +532,7 @@ class App extends React.Component {
                                         <PageHeader>오픈소스개발<small>&nbsp;&nbsp;&nbsp;&nbsp;신정규교수님</small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
-
+                                        <Memo4/>
                                     </Col>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2017/1/2">
@@ -532,7 +540,7 @@ class App extends React.Component {
                                         <PageHeader>자료구조론<small>&nbsp;&nbsp;&nbsp;&nbsp;조성현교수님</small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
-
+                                        <Memo5/>
                                     </Col>
                                 </Tab.Pane>
                             </Tab.Content>

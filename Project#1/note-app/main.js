@@ -1,5 +1,19 @@
+const express = require('express');
+const apps = express();
+const path = require('path');
+
+apps.use('/', express.static(path.resolve(__dirname, './build')));
+apps.get('*', (req, res, next) => {
+    if(req.path.split('/')[1] === 'static') return next();
+    res.sendFile(path.resolve(__dirname, './build/index.html'));
+});
+
+apps.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+});
+
 const {app, BrowserWindow} = require('electron')
-const path = require('path')
+
 const url = require('url')
 
 // 윈도우 객체를 전역에 유지합니다. 만약 이렇게 하지 않으면
@@ -8,7 +22,11 @@ let win
 
 function createWindow () {
     // 새로운 브라우저 창을 생성합니다.
-    win = new BrowserWindow({width: 800, height: 600})
+    win = new BrowserWindow({
+        width: 1200,
+        height: 700,
+        icon: path.join(__dirname, 'memo.icns')
+    })
 
     // 그리고 현재 디렉터리의 index.html을 로드합니다.
     win.loadURL(url.format({
@@ -16,6 +34,10 @@ function createWindow () {
         protocol: 'http:',
         slashes: true
     }))
+
+
+    // 개발자 도구를 엽니다.
+    // win.webContents.openDevTools()
 
     // 창이 닫히면 호출됩니다.
     win.on('closed', () => {
@@ -47,7 +69,3 @@ app.on('activate', () => {
         createWindow()
     }
 })
-
-// 이 파일엔 제작할 애플리케이션에 특화된 메인 프로세스 코드를
-// 포함할 수 있습니다. 또한 파일을 분리하여 require하는 방법으로
-// 코드를 작성할 수도 있습니다.

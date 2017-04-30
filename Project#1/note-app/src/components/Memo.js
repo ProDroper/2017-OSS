@@ -57,7 +57,6 @@ export default class Memo extends React.Component {
     }
 
     handleRemove(){
-        console.log('remove');
       if(this.state.selectedKey < 0){
         return;
       }

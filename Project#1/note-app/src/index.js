@@ -8,3 +8,4 @@ ReactDOM.render(<App />, memoElement);
 if (module.hot) {
   module.hot.accept();
 }
+
