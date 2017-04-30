@@ -65,19 +65,24 @@ class App extends React.Component {
     }
 
     handleEdit(){
-        this.setState({
-            memberdata: update(this.state.memberdata,
-                {
-                    [this.state.idx] : {
-                        id : { $set: this.state.myid },
-                        pw : { $set: this.state.mypw },
-                        name: { $set: this.state.name_e },
-                        sch: { $set: this.state.sch_e },
-                        study: { $set: this.state.study_e },
-                        num: { $set: this.state.num_e }
-                    }
-                })
-        });
+        if(this.state.name_e !== '' && this.state.sch_e !== '' && this.state.study_e !== '' && this.state.num_e !== '') {
+            this.setState({
+                memberdata: update(this.state.memberdata,
+                    {
+                        [this.state.idx]: {
+                            id: {$set: this.state.myid},
+                            pw: {$set: this.state.mypw},
+                            name: {$set: this.state.name_e},
+                            sch: {$set: this.state.sch_e},
+                            study: {$set: this.state.study_e},
+                            num: {$set: this.state.num_e}
+                        }
+                    })
+            });
+        }
+        else{
+            alert("비어있는 항목이 있습니다.")
+        }
     }
 
     handleChange(e) {
@@ -93,10 +98,10 @@ class App extends React.Component {
     }
 
     handleClick() {
-        if(this.state.mypw.length < 6) {
-            alert("비밀번호가 너무 짧습니다.");
+        if(this.state.pw.length < 6) {
+            alert("비밀번호가 너무 짧습니다.")
         }
-        else {
+        else if(this.state.id !== '' && this.state.name !== '' && this.state.sch !== '' && this.state.study !== '' && this.state.num !== ''){
             const member = {
                 id: this.state.id,
                 pw: this.state.pw,
@@ -117,6 +122,9 @@ class App extends React.Component {
             this.setState({
                 isJoinus: false
             });
+        }
+        else {
+            alert("비어있는 항목이 있습니다.")
         }
     }
     componentWillMount(){
