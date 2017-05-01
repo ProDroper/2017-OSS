@@ -395,6 +395,7 @@ class App extends React.Component {
                                     </Nav>
                                 </Panel>
                             </Accordion>
+                            <Button href="http://portal.hanyang.ac.kr">한양대학교 포탈 바로가기</Button>
                             <div style={all}/>
                         </Col>
                         <Col sm={10}>
