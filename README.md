@@ -22,13 +22,10 @@
 ```
 
 ### 개발 정보
-**프런트앤드 - react.js**
-
-**백앤드 - node.js, express.js**
-
-**저장 - localStorage**
-
-**패키징 - electron**
+* 프런트앤드 - react.js
+* 백앤드 - node.js, express.js
+* 저장 - localStorage
+* 패키징 - electron
 
 
 ### 기능
