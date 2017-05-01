@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { Form,ButtonGroup,Button,Col,wellStyles,FormGroup,ControlLabel,FormControl } from 'react-bootstrap';
 
 export default class MemoCreate extends React.Component {
@@ -22,7 +23,18 @@ export default class MemoCreate extends React.Component {
   }
 
   handleClick() {
-    if(this.state.title !== '' && this.state.date !== '' && this.state.contents !== '') {
+      if(this.state.date === ''){
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+          var options = {year: undefined, month: undefined, day: undefined, hour: "2-digit", minute: "2-digit" };
+          var time = date.toLocaleTimeString("en-US",options);
+          this.setState({
+              date: year + '년 ' + month + '월 ' + day + '일 ' + time
+          });
+      }
+      if(this.state.title !== '' && this.state.date !== '' && this.state.contents !== '') {
         const memo = {
             title: this.state.title,
             date: this.state.date,

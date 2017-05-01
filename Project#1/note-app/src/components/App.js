@@ -5,10 +5,10 @@ import Memo3 from './Memo3';
 import Memo4 from './Memo4';
 import Memo5 from './Memo5';
 import Calendar from './Calendar';
+import Clockview from './Clockview';
 import ReactCountdownClock from 'react-countdown-clock';
 import AnalogClock, { Themes } from 'react-analog-clock';
 import update from 'react-addons-update';
-
 import { wellStyles,Form,ControlLabel,Button,ButtonGroup,ListGroup,ListGroupItem,Tab,Row,Col,Accordion,Panel,Nav,NavItem,FormGroup,FormControl,PageHeader } from 'react-bootstrap';
 
 
@@ -514,7 +514,7 @@ class App extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2016/2/1">
                                     <Row>
-                                        <PageHeader>오픈소스SW기초<small>&nbsp;&nbsp;&nbsp;&nbsp;신정규교수님</small></PageHeader>
+                                        <PageHeader>오픈소스SW기초<small>&nbsp;&nbsp;&nbsp;&nbsp;신정규교수님&nbsp;&nbsp;&nbsp;&nbsp;<Clockview/></small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
                                         <Memo/>
@@ -522,7 +522,7 @@ class App extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2016/2/2">
                                     <Row>
-                                        <PageHeader>시스템프로그래밍기초<small>&nbsp;&nbsp;&nbsp;&nbsp;도경구교수님</small></PageHeader>
+                                        <PageHeader>시스템프로그래밍기초<small>&nbsp;&nbsp;&nbsp;&nbsp;도경구교수님&nbsp;&nbsp;&nbsp;&nbsp;<Clockview/></small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
                                         <Memo2/>
@@ -530,7 +530,7 @@ class App extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2016/2/3">
                                     <Row>
-                                        <PageHeader>프로그래밍설계방법론<small>&nbsp;&nbsp;&nbsp;&nbsp;김광교수님</small></PageHeader>
+                                        <PageHeader>프로그래밍설계방법론<small>&nbsp;&nbsp;&nbsp;&nbsp;김광교수님&nbsp;&nbsp;&nbsp;&nbsp;<Clockview/></small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
                                         <Memo3/>
@@ -538,7 +538,7 @@ class App extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2017/1/1">
                                     <Row>
-                                        <PageHeader>오픈소스개발<small>&nbsp;&nbsp;&nbsp;&nbsp;신정규교수님</small></PageHeader>
+                                        <PageHeader>오픈소스개발<small>&nbsp;&nbsp;&nbsp;&nbsp;신정규교수님&nbsp;&nbsp;&nbsp;&nbsp;<Clockview/></small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
                                         <Memo4/>
@@ -546,7 +546,7 @@ class App extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="2017/1/2">
                                     <Row>
-                                        <PageHeader>자료구조론<small>&nbsp;&nbsp;&nbsp;&nbsp;조성현교수님</small></PageHeader>
+                                        <PageHeader>자료구조론<small>&nbsp;&nbsp;&nbsp;&nbsp;조성현교수님&nbsp;&nbsp;&nbsp;&nbsp;<Clockview/></small></PageHeader>
                                     </Row>
                                     <Col sm={10} smOffset={1}>
                                         <Memo5/>
