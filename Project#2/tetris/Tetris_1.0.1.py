@@ -9,6 +9,7 @@ BOARDWIDTH = 10
 BOARDHEIGHT = 20
 BLANK = '.'
 HIGHSCORE = 0
+MUTE = 0
 
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
@@ -18,7 +19,7 @@ TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) - 20
 
 #               R    G    B
 WHITE       = (255, 255, 255)
-GRAY        = (185, 185, 185)
+GRAY        = ( 50,  50,  50)
 BLACK       = (  0,   0,   0)
 RED         = (155,   0,   0)
 LIGHTRED    = (175,  20,  20)
@@ -152,29 +153,43 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, HIGHSCORE
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, HIGHSCORE, MUTE, BGCOLOR
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    DISPLAYSURF.fill(BGCOLOR)
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
     # pygame.display.set_caption('Tetromino')
     titleSurf, titleRect = makeTextObjs('TETRIS', BIGFONT, TEXTCOLOR)
     titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 50)
     DISPLAYSURF.blit(titleSurf, titleRect)
+
+    if BGCOLOR == BLACK :
+        COLOR = "GRAY"
+    else :
+        COLOR = "BLACK"
+
+    if MUTE == 0 :
+        TEXT = "Mute"
+    else :
+        TEXT = "Unmute"
+
     choose = dumbmenu(DISPLAYSURF, [
                             'Start Game',
                             'Manual',
-                            'Options',
                             'Highscore',
-                            'Quit Game'], 180,280,None,32,1.4)
+                            TEXT,
+                            "Theme : " + COLOR,
+                            'Quit Game'], 180,250,None,32,1.4)
     if choose == 0 :
         while True: # game loop
-            if random.randint(0, 1) == 0:
-                pygame.mixer.music.load('tetrisb.mid')
-            else:
-                pygame.mixer.music.load('tetrisc.mid')
-            pygame.mixer.music.play(-1, 0.0)
+            if MUTE == 0 :
+                if random.randint(0, 1) == 0:
+                    pygame.mixer.music.load('tetrisb.mid')
+                else:
+                    pygame.mixer.music.load('tetrisc.mid')
+                pygame.mixer.music.play(-1, 0.0)
             runGame()
             pygame.mixer.music.stop()
             showTextScreen('Game Over')
@@ -208,7 +223,7 @@ def main():
         if choose2 == 0 :
             main()
 
-    elif choose == 3 :
+    elif choose == 2 :
         text = "HIGHSCORE : " + str(HIGHSCORE)
         DISPLAYSURF.fill(BGCOLOR)
         sSurf, sRect = makeTextObjs(text, BASICFONT, TEXTCOLOR)
@@ -218,6 +233,20 @@ def main():
                                 'Exit'], 180,350,None,32,1.4)
         if choose2 == 0 :
             main()
+
+    elif choose == 3 :
+        if MUTE == 0 :
+            MUTE = 1
+        else :
+            MUTE = 0
+        main()
+
+    elif choose == 4 :
+        if BGCOLOR == BLACK :
+            BGCOLOR = GRAY
+        else :
+            BGCOLOR = BLACK
+        main()
 
     else :
         pygame.quit()
