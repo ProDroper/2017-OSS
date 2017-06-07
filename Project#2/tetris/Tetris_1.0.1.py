@@ -2,12 +2,13 @@ import random, time, pygame, sys
 from pygame.locals import *
 
 FPS = 25
-WINDOWWIDTH = 450
+WINDOWWIDTH = 500
 WINDOWHEIGHT = 450
 BOXSIZE = 20
 BOARDWIDTH = 10
 BOARDHEIGHT = 20
 BLANK = '.'
+HIGHSCORE = 0
 
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
@@ -151,7 +152,7 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, HIGHSCORE
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -165,8 +166,8 @@ def main():
                             'Start Game',
                             'Manual',
                             'Options',
-                            'Show Highscore',
-                            'Quit Game'], 130,280,None,32,1.4)
+                            'Highscore',
+                            'Quit Game'], 180,280,None,32,1.4)
     if choose == 0 :
         while True: # game loop
             if random.randint(0, 1) == 0:
@@ -177,38 +178,54 @@ def main():
             runGame()
             pygame.mixer.music.stop()
             showTextScreen('Game Over')
+            main()
 
     elif choose == 1 :
-        while True :
-            DISPLAYSURF.fill(BGCOLOR)
-            uSurf, uRect = makeTextObjs("Up - Block rotate 90", BASICFONT, TEXTCOLOR)
-            rSurf, rRect = makeTextObjs("Right - Block move right", BASICFONT, TEXTCOLOR)
-            lSurf, lRect = makeTextObjs("Left - Block move left", BASICFONT, TEXTCOLOR)
-            dSurf, dRect = makeTextObjs("Down - Block move down", BASICFONT, TEXTCOLOR)
-            sSurf, sRect = makeTextObjs("Space bar - Block down", BASICFONT, TEXTCOLOR)
-            vSurf, vRect = makeTextObjs("Level = (score / 3) + 1", BASICFONT, TEXTCOLOR)
-            uRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 120)
-            rRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
-            lRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
-            dRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 30)
-            sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 0)
-            vRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - -60)
-            DISPLAYSURF.blit(uSurf, uRect)
-            DISPLAYSURF.blit(rSurf, rRect)
-            DISPLAYSURF.blit(lSurf, lRect)
-            DISPLAYSURF.blit(dSurf, dRect)
-            DISPLAYSURF.blit(sSurf, sRect)
-            DISPLAYSURF.blit(vSurf, vRect)
-            choose2 = dumbmenu(DISPLAYSURF, [
-                                    'Exit'], 130,350,None,32,1.4)
-            if choose2 == 0 :
-                main()
+        DISPLAYSURF.fill(BGCOLOR)
+        uSurf, uRect = makeTextObjs("Up - Block rotate 90", BASICFONT, TEXTCOLOR)
+        rSurf, rRect = makeTextObjs("Right - Block move right", BASICFONT, TEXTCOLOR)
+        lSurf, lRect = makeTextObjs("Left - Block move left", BASICFONT, TEXTCOLOR)
+        dSurf, dRect = makeTextObjs("Down - Block move down", BASICFONT, TEXTCOLOR)
+        sSurf, sRect = makeTextObjs("Space bar - Block down", BASICFONT, TEXTCOLOR)
+        pSurf, pRect = makeTextObjs("P - Paused", BASICFONT, TEXTCOLOR)
+        vSurf, vRect = makeTextObjs("Level = (score / 3) + 1", BASICFONT, TEXTCOLOR)
+        uRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 120)
+        rRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
+        lRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
+        dRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 30)
+        sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 0)
+        pRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - -30)
+        vRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - -60)
+        DISPLAYSURF.blit(uSurf, uRect)
+        DISPLAYSURF.blit(rSurf, rRect)
+        DISPLAYSURF.blit(lSurf, lRect)
+        DISPLAYSURF.blit(dSurf, dRect)
+        DISPLAYSURF.blit(sSurf, sRect)
+        DISPLAYSURF.blit(pSurf, pRect)
+        DISPLAYSURF.blit(vSurf, vRect)
+        choose2 = dumbmenu(DISPLAYSURF, [
+                                'Exit'], 180,350,None,32,1.4)
+        if choose2 == 0 :
+            main()
+
+    elif choose == 3 :
+        text = "HIGHSCORE : " + str(HIGHSCORE)
+        DISPLAYSURF.fill(BGCOLOR)
+        sSurf, sRect = makeTextObjs(text, BASICFONT, TEXTCOLOR)
+        sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
+        DISPLAYSURF.blit(sSurf, sRect)
+        choose2 = dumbmenu(DISPLAYSURF, [
+                                'Exit'], 180,350,None,32,1.4)
+        if choose2 == 0 :
+            main()
+
     else :
         pygame.quit()
         sys.exit()
 
 def runGame():
     # setup variables for the start of the game
+    global HIGHSCORE
     board = getBlankBoard()
     lastMoveDownTime = time.time()
     lastMoveSidewaysTime = time.time()
@@ -230,7 +247,8 @@ def runGame():
             lastFallTime = time.time() # reset lastFallTime
 
             if not isValidPosition(board, fallingPiece):
-                return # can't fit a new piece on the board, so game over
+                return
+            # can't fit a new piece on the board, so game over
 
         checkForQuit()
         for event in pygame.event.get(): # event handling loop
@@ -311,6 +329,8 @@ def runGame():
                 # falling piece has landed, set it on the board
                 addToBoard(board, fallingPiece)
                 score += removeCompleteLines(board)
+                if HIGHSCORE < score :
+                    HIGHSCORE = score
                 level, fallFreq = calculateLevelAndFallFreq(score)
                 fallingPiece = None
             else:
@@ -509,6 +529,10 @@ def drawStatus(score, level):
     levelRect.topleft = (10, 20)
     DISPLAYSURF.blit(levelSurf, levelRect)
 
+    hsSurf = BASICFONT.render('Highscore: %s' % HIGHSCORE, True, TEXTCOLOR)
+    hsRect = hsSurf.get_rect()
+    hsRect.topleft = (10, 80)
+    DISPLAYSURF.blit(hsSurf, hsRect)
 
 def drawPiece(piece, pixelx=None, pixely=None):
     shapeToDraw = PIECES[piece['shape']][piece['rotation']]
