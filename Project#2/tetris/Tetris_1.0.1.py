@@ -153,12 +153,13 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, HIGHSCORE, MUTE, BGCOLOR
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, MIDFONT, HIGHSCORE, MUTE, BGCOLOR
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     DISPLAYSURF.fill(BGCOLOR)
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
+    MIDFONT = pygame.font.Font('freesansbold.ttf', 70)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
     # pygame.display.set_caption('Tetromino')
     titleSurf, titleRect = makeTextObjs('TETRIS', BIGFONT, TEXTCOLOR)
@@ -181,7 +182,7 @@ def main():
                             'Highscore',
                             TEXT,
                             "Theme : " + COLOR,
-                            'Quit Game'], 180,250,None,32,1.4)
+                            'Quit Game'], 160,250,None,32,1.4)
     if choose == 0 :
         while True: # game loop
             if MUTE == 0 :
@@ -192,7 +193,7 @@ def main():
                 pygame.mixer.music.play(-1, 0.0)
             runGame()
             pygame.mixer.music.stop()
-            showTextScreen('Game Over')
+            showTextScreen2('Game Over')
             main()
 
     elif choose == 1 :
@@ -219,7 +220,7 @@ def main():
         DISPLAYSURF.blit(pSurf, pRect)
         DISPLAYSURF.blit(vSurf, vRect)
         choose2 = dumbmenu(DISPLAYSURF, [
-                                'Exit'], 180,350,None,32,1.4)
+                                'Exit'], 160,350,None,32,1.4)
         if choose2 == 0 :
             main()
 
@@ -230,7 +231,7 @@ def main():
         sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
         DISPLAYSURF.blit(sSurf, sRect)
         choose2 = dumbmenu(DISPLAYSURF, [
-                                'Exit'], 180,350,None,32,1.4)
+                                'Exit'], 160,350,None,32,1.4)
         if choose2 == 0 :
             main()
 
@@ -281,6 +282,10 @@ def runGame():
 
         checkForQuit()
         for event in pygame.event.get(): # event handling loop
+            # for i in range(1, BOARDHEIGHT):
+            #     if not isValidPosition(board, fallingPiece, adjY=i):
+            #         drawPiece(fallingPiece, pixelx=0, pixely=0)
+            #         break
             if event.type == KEYUP:
                 if (event.key == K_p):
                     # Pausing the game
@@ -404,11 +409,6 @@ def checkForKeyPress():
 def showTextScreen(text):
     # This function displays large text in the
     # center of the screen until a key is pressed.
-    # Draw the text drop shadow
-    titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTSHADOWCOLOR)
-    titleRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
-    DISPLAYSURF.blit(titleSurf, titleRect)
-
     # Draw the text
     titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTCOLOR)
     titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 3)
@@ -423,6 +423,22 @@ def showTextScreen(text):
         pygame.display.update()
         FPSCLOCK.tick()
 
+def showTextScreen2(text):
+    # This function displays large text in the
+    # center of the screen until a key is pressed.
+    # Draw the text
+    titleSurf, titleRect = makeTextObjs(text, MIDFONT, TEXTCOLOR)
+    titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 3)
+    DISPLAYSURF.blit(titleSurf, titleRect)
+
+    # Draw the additional "Press a key to play." text.
+    pressKeySurf, pressKeyRect = makeTextObjs('Press a key to play.', BASICFONT, TEXTCOLOR)
+    pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
+    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+    while checkForKeyPress() == None:
+        pygame.display.update()
+        FPSCLOCK.tick()
 
 def checkForQuit():
     for event in pygame.event.get(QUIT): # get all the QUIT events
@@ -534,16 +550,23 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 
 
 def drawBoard(board):
+    GRAY = (50,50,50)
+    BLACK = (25,25,25)
+    COLOR = GRAY
+    if BGCOLOR == GRAY :
+        COLOR = BLACK
     # draw the border around the board
-    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, (BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
-
+    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, (BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 3)
     # fill the background of the board
     pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
     # draw the individual boxes on the board
     for x in range(BOARDWIDTH):
         for y in range(BOARDHEIGHT):
-            drawBox(x, y, board[x][y])
-
+            if board[x][y] != '.' :
+                drawBox(x, y, board[x][y])
+            else :
+                if (x + y) % 2 == 0 :
+                    pygame.draw.rect(DISPLAYSURF, COLOR, (152 + x * BOXSIZE, 30 + y * BOXSIZE, BOXSIZE - 1, BOXSIZE - 1))
 
 def drawStatus(score, level):
     # draw the score text
@@ -574,7 +597,6 @@ def drawPiece(piece, pixelx=None, pixely=None):
         for y in range(TEMPLATEHEIGHT):
             if shapeToDraw[y][x] != BLANK:
                 drawBox(None, None, piece['color'], pixelx + (x * BOXSIZE), pixely + (y * BOXSIZE))
-
 
 def drawNextPiece(piece):
     # draw the "next" text
