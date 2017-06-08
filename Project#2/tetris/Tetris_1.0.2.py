@@ -462,6 +462,17 @@ def showTextScreen2(text):
         pygame.display.update()
         FPSCLOCK.tick()
 
+def showTextScreen3(text):
+    # This function displays large text in the
+    # center of the screen until a key is pressed.
+    # Draw the text
+    titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTCOLOR)
+    titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 3)
+    DISPLAYSURF.blit(titleSurf, titleRect)
+    pygame.display.update()
+    time.sleep(1)
+    FPSCLOCK.tick()
+
 def checkForQuit():
     for event in pygame.event.get(QUIT): # get all the QUIT events
         terminate() # terminate if any QUIT events are present
@@ -556,6 +567,8 @@ def removeCompleteLines(board):
             # complete, it will be removed.
         else:
             y -= 1 # move on to check next row up
+    if numLinesRemoved > 1 :
+        showTextScreen3('X'+str(numLinesRemoved)) # pause until a key press
     return numLinesRemoved
 
 
