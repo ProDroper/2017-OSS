@@ -11,6 +11,9 @@ BLANK = '.'
 HIGHSCORE = 0
 MUTE = 0
 
+file = open("highscore.txt", "r")
+for line in file:    HIGHSCORE = int(line)file.close()
+
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
 
@@ -162,8 +165,9 @@ def main():
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     MIDFONT = pygame.font.Font('freesansbold.ttf', 70)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
+    TFONT = pygame.font.Font('freesansbold.ttf', 80)
     # pygame.display.set_caption('Tetromino')
-    titleSurf, titleRect = makeTextObjs('TETRIS', BIGFONT, TEXTCOLOR)
+    titleSurf, titleRect = makeTextObjs('TETRIS', TFONT, TEXTCOLOR)
     titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 50)
     DISPLAYSURF.blit(titleSurf, titleRect)
 
@@ -183,7 +187,7 @@ def main():
                             'Highscore',
                             TEXT,
                             "Theme : " + COLOR,
-                            'Quit Game'], 160,250,None,32,1.4)
+                            'Quit Game'], 160,250,None,30,1.4)
     if choose == 0 :
         while True: # game loop
             if MUTE == 0 :
@@ -195,6 +199,9 @@ def main():
             runGame()
             pygame.mixer.music.stop()
             showTextScreen2('Game Over')
+            file = open("highscore.txt", "w")
+            file.write(str(HIGHSCORE))
+            file.close()
             main()
 
     elif choose == 1 :
@@ -224,7 +231,7 @@ def main():
         DISPLAYSURF.blit(pSurf, pRect)
         DISPLAYSURF.blit(vSurf, vRect)
         choose2 = dumbmenu(DISPLAYSURF, [
-                                'Exit'], 160,350,None,32,1.4)
+                                'Exit'], 160,350,None,30,1.4)
         if choose2 == 0 :
             main()
 
@@ -235,8 +242,16 @@ def main():
         sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
         DISPLAYSURF.blit(sSurf, sRect)
         choose2 = dumbmenu(DISPLAYSURF, [
-                                'Exit'], 160,350,None,32,1.4)
+                                'Reset',
+                                'Exit'], 160,350,None,30,1.4)
+
         if choose2 == 0 :
+            HIGHSCORE = 0
+            file = open("highscore.txt", "w")
+            file.write(str(HIGHSCORE))
+            file.close()
+            main()
+        if choose2 == 1 :
             main()
 
     elif choose == 3 :
@@ -281,7 +296,10 @@ def runGame():
             shadowPiece = getShadowPiece(fallingPiece)
             nextPiece = getNewPiece()
             lastFallTime = time.time() # reset lastFallTime
-
+            for i in range(1, BOARDHEIGHT):
+                if not isValidPosition(board, fallingPiece, adjY=i):
+                    break
+                shadowPiece['y'] = fallingPiece['y'] + i
             if not isValidPosition(board, fallingPiece):
                 return
             # can't fit a new piece on the board, so game over
@@ -357,12 +375,13 @@ def runGame():
                     fallingPiece['y'] += i - 1
 
                 elif event.key == K_LSHIFT:
-                    fallingPiece, nextPiece = nextPiece, fallingPiece
-                    fallingPiece['y'] = nextPiece['y']
-                    nextPiece['y'] = -2
-                    fallingPiece['x'] = nextPiece['x']
-                    nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
-                    shadowPiece = getShadowPiece(fallingPiece)
+                    if isValidPosition(board, nextPiece, fallingPiece['y']):
+                        fallingPiece, nextPiece = nextPiece, fallingPiece
+                        fallingPiece['y'] = nextPiece['y']
+                        nextPiece['y'] = -2
+                        fallingPiece['x'] = nextPiece['x']
+                        nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
+                        shadowPiece = getShadowPiece(fallingPiece)
 
         # handle moving the piece because of user input
         if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
@@ -400,8 +419,8 @@ def runGame():
         drawStatus(score, level)
         drawNextPiece(nextPiece)
         if fallingPiece != None:
-            drawPiece(fallingPiece)
             drawPiece(shadowPiece)
+            drawPiece(fallingPiece)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -569,6 +588,7 @@ def removeCompleteLines(board):
             y -= 1 # move on to check next row up
     if numLinesRemoved > 1 :
         showTextScreen3('X'+str(numLinesRemoved)) # pause until a key press
+    numLinesRemoved *= numLinesRemoved
     return numLinesRemoved
 
 
@@ -644,7 +664,7 @@ def drawNextPiece(piece):
     # draw the "next" text
     nextSurf = BASICFONT.render('Next', True, TEXTCOLOR)
     nextRect = nextSurf.get_rect()
-    nextRect.topleft = (WINDOWWIDTH - 100, 80)
+    nextRect.topleft = (WINDOWWIDTH - 120, 80)
     DISPLAYSURF.blit(nextSurf, nextRect)
     # draw the "next" piece
     drawPiece(piece, pixelx=WINDOWWIDTH-100, pixely=100)
