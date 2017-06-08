@@ -376,7 +376,6 @@ def runGame():
 
         if movingDown and time.time() - lastMoveDownTime > MOVEDOWNFREQ and isValidPosition(board, fallingPiece, adjY=1):
             fallingPiece['y'] += 1
-            shadowPiece['y'] += 1
             lastMoveDownTime = time.time()
 
         # let the piece fall if it is time to fall
@@ -581,7 +580,7 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 
 def drawBoard(board):
     GRAY = (50,50,50)
-    BLACK = (25,25,25)
+    BLACK = (80,80,80)
     COLOR = GRAY
     if BGCOLOR == GRAY :
         COLOR = BLACK
