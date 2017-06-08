@@ -204,13 +204,15 @@ def main():
         lSurf, lRect = makeTextObjs("Left - Block move left", BASICFONT, TEXTCOLOR)
         dSurf, dRect = makeTextObjs("Down - Block move down", BASICFONT, TEXTCOLOR)
         sSurf, sRect = makeTextObjs("Space bar - Block down", BASICFONT, TEXTCOLOR)
+        fSurf, fRect = makeTextObjs("SHIFT - Block change", BASICFONT, TEXTCOLOR)
         pSurf, pRect = makeTextObjs("P - Paused", BASICFONT, TEXTCOLOR)
         vSurf, vRect = makeTextObjs("Level = (score / 3) + 1", BASICFONT, TEXTCOLOR)
-        uRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 120)
-        rRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
-        lRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
-        dRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 30)
-        sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 0)
+        uRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 150)
+        rRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 120)
+        lRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
+        dRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
+        sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 30)
+        fRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 0)
         pRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - -30)
         vRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - -60)
         DISPLAYSURF.blit(uSurf, uRect)
@@ -218,6 +220,7 @@ def main():
         DISPLAYSURF.blit(lSurf, lRect)
         DISPLAYSURF.blit(dSurf, dRect)
         DISPLAYSURF.blit(sSurf, sRect)
+        DISPLAYSURF.blit(fSurf, fRect)
         DISPLAYSURF.blit(pSurf, pRect)
         DISPLAYSURF.blit(vSurf, vRect)
         choose2 = dumbmenu(DISPLAYSURF, [
@@ -352,6 +355,14 @@ def runGame():
                         if not isValidPosition(board, fallingPiece, adjY=i):
                             break
                     fallingPiece['y'] += i - 1
+
+                elif event.key == K_LSHIFT:
+                    fallingPiece, nextPiece = nextPiece, fallingPiece
+                    fallingPiece['y'] = nextPiece['y']
+                    nextPiece['y'] = -2
+                    fallingPiece['x'] = nextPiece['x']
+                    nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
+                    shadowPiece = getShadowPiece(fallingPiece)
 
         # handle moving the piece because of user input
         if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
