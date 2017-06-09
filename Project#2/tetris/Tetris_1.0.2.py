@@ -213,7 +213,7 @@ def main():
         sSurf, sRect = makeTextObjs("Space bar - Block down", BASICFONT, TEXTCOLOR)
         fSurf, fRect = makeTextObjs("SHIFT - Block change", BASICFONT, TEXTCOLOR)
         pSurf, pRect = makeTextObjs("P - Paused", BASICFONT, TEXTCOLOR)
-        vSurf, vRect = makeTextObjs("Level = (score / 3) + 1", BASICFONT, TEXTCOLOR)
+        vSurf, vRect = makeTextObjs("Level = (score / 5) + 1", BASICFONT, TEXTCOLOR)
         uRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 150)
         rRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 120)
         lRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
@@ -288,6 +288,7 @@ def runGame():
     fallingPiece = getNewPiece()
     shadowPiece = getShadowPiece(fallingPiece)
     nextPiece = getNewPiece()
+    start_ticks=pygame.time.get_ticks()
 
     while True: # game loop
         if fallingPiece == None:
@@ -327,9 +328,12 @@ def runGame():
                 elif (event.key == K_DOWN or event.key == K_s):
                     movingDown = False
 
+
             elif event.type == KEYDOWN:
                 # moving the piece sideways
                 if (event.key == K_LEFT or event.key == K_a) and isValidPosition(board, fallingPiece, adjX=-1):
+                    if MUTE == 0 :
+                        pygame.mixer.Sound('move.wav').play()
                     fallingPiece['x'] -= 1
                     shadowPiece['x'] -= 1
                     movingLeft = True
@@ -337,6 +341,8 @@ def runGame():
                     lastMoveSidewaysTime = time.time()
 
                 elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
+                    if MUTE == 0 :
+                        pygame.mixer.Sound('move.wav').play()
                     fallingPiece['x'] += 1
                     shadowPiece['x'] += 1
                     movingRight = True
@@ -345,12 +351,16 @@ def runGame():
 
                 # rotating the piece (if there is room to rotate)
                 elif (event.key == K_UP or event.key == K_w):
+                    if MUTE == 0 :
+                        pygame.mixer.Sound('move.wav').play()
                     fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % len(PIECES[fallingPiece['shape']])
                     shadowPiece['rotation'] = (shadowPiece['rotation'] + 1) % len(PIECES[shadowPiece['shape']])
                     if not isValidPosition(board, fallingPiece):
                         fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % len(PIECES[fallingPiece['shape']])
                         shadowPiece['rotation'] = (shadowPiece['rotation'] - 1) % len(PIECES[shadowPiece['shape']])
                 elif (event.key == K_q): # rotate the other direction
+                    if MUTE == 0 :
+                        pygame.mixer.Sound('move.wav').play()
                     fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % len(PIECES[fallingPiece['shape']])
                     shadowPiece['rotation'] = (shadowPiece['rotation'] - 1) % len(PIECES[shadowPiece['shape']])
                     if not isValidPosition(board, fallingPiece):
@@ -366,6 +376,8 @@ def runGame():
 
                 # move the current piece all the way down
                 elif event.key == K_SPACE:
+                    if MUTE == 0 :
+                        pygame.mixer.Sound('move.wav').play()
                     movingDown = False
                     movingLeft = False
                     movingRight = False
@@ -375,13 +387,12 @@ def runGame():
                     fallingPiece['y'] += i - 1
 
                 elif event.key == K_LSHIFT:
-                    if isValidPosition(board, nextPiece, fallingPiece['y']):
-                        fallingPiece, nextPiece = nextPiece, fallingPiece
-                        fallingPiece['y'] = nextPiece['y']
-                        nextPiece['y'] = -2
-                        fallingPiece['x'] = nextPiece['x']
-                        nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
-                        shadowPiece = getShadowPiece(fallingPiece)
+                    fallingPiece, nextPiece = nextPiece, fallingPiece
+                    fallingPiece['y'] = nextPiece['y']
+                    nextPiece['y'] = -2
+                    fallingPiece['x'] = nextPiece['x']
+                    nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
+                    shadowPiece = getShadowPiece(fallingPiece)
 
         # handle moving the piece because of user input
         if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
@@ -504,7 +515,7 @@ def checkForQuit():
 def calculateLevelAndFallFreq(score):
     # Based on the score, return the level the player is on and
     # how many seconds pass until a falling piece falls one space.
-    level = int(score / 3) + 1
+    level = int(score / 5) + 1
     fallFreq = 0.27 - (level * 0.02)
     return level, fallFreq
 
@@ -588,6 +599,8 @@ def removeCompleteLines(board):
             y -= 1 # move on to check next row up
     if numLinesRemoved > 1 :
         showTextScreen3('X'+str(numLinesRemoved)) # pause until a key press
+    if numLinesRemoved > 0 and MUTE == 0 :
+        pygame.mixer.Sound('remove.wav').play()
     numLinesRemoved *= numLinesRemoved
     return numLinesRemoved
 
