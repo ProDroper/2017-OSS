@@ -384,13 +384,13 @@ def runGame():
                             break
                     fallingPiece['y'] += i - 1
 
-                # elif event.key == K_LSHIFT:
-                #     fallingPiece, nextPiece = nextPiece, fallingPiece
-                #     fallingPiece['y'] = nextPiece['y']
-                #     nextPiece['y'] = -2
-                #     fallingPiece['x'] = nextPiece['x']
-                #     nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
-                #     shadowPiece = getShadowPiece(fallingPiece)
+                elif event.key == K_LSHIFT:
+                    fallingPiece, nextPiece = nextPiece, fallingPiece
+                    fallingPiece['y'] = nextPiece['y']
+                    nextPiece['y'] = -2
+                    fallingPiece['x'] = nextPiece['x']
+                    nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
+                    shadowPiece = getShadowPiece(fallingPiece)
 
                 elif event.key == K_r:
                     runGame()
