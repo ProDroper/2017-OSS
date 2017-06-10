@@ -12,7 +12,9 @@ HIGHSCORE = 0
 MUTE = 0
 
 file = open("highscore.txt", "r")
-for line in file:    HIGHSCORE = int(line)file.close()
+for line in file:
+    HIGHSCORE = int(line)
+file.close()
 
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
@@ -170,7 +172,6 @@ def main():
     titleSurf, titleRect = makeTextObjs('TETRIS', TFONT, TEXTCOLOR)
     titleRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 50)
     DISPLAYSURF.blit(titleSurf, titleRect)
-
     if BGCOLOR == BLACK :
         COLOR = "GRAY"
     else :
@@ -186,23 +187,22 @@ def main():
                             'Manual',
                             'Highscore',
                             TEXT,
-                            "Theme : " + COLOR,
-                            'Quit Game'], 160,250,None,30,1.4)
+                            'Theme : ' + COLOR,
+                            'Quit'], 160,250,None,30,1.4)
     if choose == 0 :
-        while True: # game loop
-            if MUTE == 0 :
-                if random.randint(0, 1) == 0:
-                    pygame.mixer.music.load('tetrisb.mid')
-                else:
-                    pygame.mixer.music.load('tetrisc.mid')
-                pygame.mixer.music.play(-1, 0.0)
-            runGame()
-            pygame.mixer.music.stop()
-            showTextScreen2('Game Over')
-            file = open("highscore.txt", "w")
-            file.write(str(HIGHSCORE))
-            file.close()
-            main()
+        if MUTE == 0 :
+            if random.randint(0, 1) == 0:
+                pygame.mixer.music.load('tetrisb.mid')
+            else:
+                pygame.mixer.music.load('tetrisc.mid')
+            pygame.mixer.music.play(-1, 0.0)
+        runGame()
+        pygame.mixer.music.stop()
+        showTextScreen2('Game Over')
+        file = open("highscore.txt", "w")
+        file.write(str(HIGHSCORE))
+        file.close()
+        main()
 
     elif choose == 1 :
         DISPLAYSURF.fill(BGCOLOR)
@@ -331,7 +331,7 @@ def runGame():
 
             elif event.type == KEYDOWN:
                 # moving the piece sideways
-                if (event.key == K_LEFT or event.key == K_a) and isValidPosition(board, fallingPiece, adjX=-1):
+                if event.key == K_LEFT and isValidPosition(board, fallingPiece, adjX=-1):
                     if MUTE == 0 :
                         pygame.mixer.Sound('move.wav').play()
                     fallingPiece['x'] -= 1
@@ -340,7 +340,7 @@ def runGame():
                     movingRight = False
                     lastMoveSidewaysTime = time.time()
 
-                elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
+                elif event.key == K_RIGHT and isValidPosition(board, fallingPiece, adjX=1):
                     if MUTE == 0 :
                         pygame.mixer.Sound('move.wav').play()
                     fallingPiece['x'] += 1
@@ -350,7 +350,7 @@ def runGame():
                     lastMoveSidewaysTime = time.time()
 
                 # rotating the piece (if there is room to rotate)
-                elif (event.key == K_UP or event.key == K_w):
+                elif event.key == K_UP :
                     if MUTE == 0 :
                         pygame.mixer.Sound('move.wav').play()
                     fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % len(PIECES[fallingPiece['shape']])
@@ -368,7 +368,7 @@ def runGame():
                         shadowPiece['rotation'] = (shadowPiece['rotation'] + 1) % len(PIECES[shadowPiece['shape']])
 
                 # making the piece fall faster with the down key
-                elif (event.key == K_DOWN or event.key == K_s):
+                elif event.key == K_DOWN :
                     movingDown = True
                     if isValidPosition(board, fallingPiece, adjY=1):
                         fallingPiece['y'] += 1
@@ -393,6 +393,12 @@ def runGame():
                     fallingPiece['x'] = nextPiece['x']
                     nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
                     shadowPiece = getShadowPiece(fallingPiece)
+
+                elif event.key == K_r:
+                    runGame()
+
+                elif event.key == K_m:
+                    return
 
         # handle moving the piece because of user input
         if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
