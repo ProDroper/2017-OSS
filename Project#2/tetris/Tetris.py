@@ -26,42 +26,39 @@ TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) - 20
 WHITE       = (255, 255, 255)
 GRAY        = ( 50,  50,  50)
 BLACK       = (  0,   0,   0)
-RED         = (155,   0,   0)
-LIGHTRED    = (175,  20,  20)
-GREEN       = (  0, 155,   0)
-LIGHTGREEN  = ( 20, 175,  20)
-BLUE        = (  0,   0, 155)
-LIGHTBLUE   = ( 20,  20, 175)
-YELLOW      = (155, 155,   0)
-LIGHTYELLOW = (175, 175,  20)
+RED         = (255,   0,   0)
+ORANGE      = (255, 153,   0)
+YELLOW      = (255, 255,   0)
+GREEN       = ( 51, 255,  51)
+BLUE        = (  0,   0, 255)
+LIGHTBLUE   = ( 51, 255, 255)
+PUPPLE      = (153,   0, 204)
 SHADOW      = (130, 130, 130)
 
 BORDERCOLOR = WHITE
 BGCOLOR = BLACK
 TEXTCOLOR = WHITE
 TEXTSHADOWCOLOR = GRAY
-COLORS      = (WHITE,     BLUE,      GREEN,      RED,      YELLOW,  SHADOW)
-LIGHTCOLORS = (WHITE,LIGHTBLUE, LIGHTGREEN, LIGHTRED, LIGHTYELLOW,  SHADOW)
-assert len(COLORS) == len(LIGHTCOLORS) # each color must have light color
+COLORS      = (RED,ORANGE,YELLOW,GREEN,BLUE,LIGHTBLUE,PUPPLE,SHADOW)
 
 TEMPLATEWIDTH = 5
 TEMPLATEHEIGHT = 5
 
 S_SHAPE_TEMPLATE = [['.....',
-                     '.....',
                      '..OO.',
                      '.OO..',
+                     '.....',
                      '.....'],
                     ['.....',
+                     '.O...',
+                     '.OO..',
                      '..O..',
-                     '..OO.',
-                     '...O.',
                      '.....']]
 
 Z_SHAPE_TEMPLATE = [['.....',
-                     '.....',
                      '.OO..',
                      '..OO.',
+                     '.....',
                      '.....'],
                     ['.....',
                      '..O..',
@@ -75,15 +72,15 @@ I_SHAPE_TEMPLATE = [['..O..',
                      '..O..',
                      '.....'],
                     ['.....',
+                     '.OOOO',
                      '.....',
-                     'OOOO.',
                      '.....',
                      '.....']]
 
 O_SHAPE_TEMPLATE = [['.....',
+                     '.OO..',
+                     '.OO..',
                      '.....',
-                     '.OO..',
-                     '.OO..',
                      '.....']]
 
 J_SHAPE_TEMPLATE = [['.....',
@@ -92,14 +89,14 @@ J_SHAPE_TEMPLATE = [['.....',
                      '.....',
                      '.....'],
                     ['.....',
-                     '..OO.',
-                     '..O..',
-                     '..O..',
+                     '.OO..',
+                     '.O...',
+                     '.O...',
                      '.....'],
                     ['.....',
-                     '.....',
                      '.OOO.',
                      '...O.',
+                     '.....',
                      '.....'],
                     ['.....',
                      '..O..',
@@ -113,14 +110,14 @@ L_SHAPE_TEMPLATE = [['.....',
                      '.....',
                      '.....'],
                     ['.....',
-                     '..O..',
-                     '..O..',
-                     '..OO.',
+                     '.O...',
+                     '.O...',
+                     '.OO..',
                      '.....'],
                     ['.....',
-                     '.....',
                      '.OOO.',
                      '.O...',
+                     '.....',
                      '.....'],
                     ['.....',
                      '.OO..',
@@ -134,14 +131,14 @@ T_SHAPE_TEMPLATE = [['.....',
                      '.....',
                      '.....'],
                     ['.....',
-                     '..O..',
-                     '..OO.',
-                     '..O..',
+                     '.O...',
+                     '.OO..',
+                     '.O...',
                      '.....'],
                     ['.....',
-                     '.....',
                      '.OOO.',
                      '..O..',
+                     '.....',
                      '.....'],
                     ['.....',
                      '..O..',
@@ -161,6 +158,7 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, MIDFONT, HIGHSCORE, MUTE, BGCOLOR
     pygame.init()
+    pygame.display.set_caption("TETRIS")
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     DISPLAYSURF.fill(BGCOLOR)
@@ -386,13 +384,13 @@ def runGame():
                             break
                     fallingPiece['y'] += i - 1
 
-                elif event.key == K_LSHIFT:
-                    fallingPiece, nextPiece = nextPiece, fallingPiece
-                    fallingPiece['y'] = nextPiece['y']
-                    nextPiece['y'] = -2
-                    fallingPiece['x'] = nextPiece['x']
-                    nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
-                    shadowPiece = getShadowPiece(fallingPiece)
+                # elif event.key == K_LSHIFT:
+                #     fallingPiece, nextPiece = nextPiece, fallingPiece
+                #     fallingPiece['y'] = nextPiece['y']
+                #     nextPiece['y'] = -2
+                #     fallingPiece['x'] = nextPiece['x']
+                #     nextPiece['x'] = int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2)
+                #     shadowPiece = getShadowPiece(fallingPiece)
 
                 elif event.key == K_r:
                     runGame()
@@ -528,11 +526,26 @@ def calculateLevelAndFallFreq(score):
 def getNewPiece():
     # return a random new piece in a random rotation and color
     shape = random.choice(list(PIECES.keys()))
+    color = 0
+    if shape == 'Z' :
+        color = 0
+    if shape == 'L' :
+        color = 1
+    if shape == 'O' :
+        color = 2
+    if shape == 'S' :
+        color = 3
+    if shape == 'J' :
+        color = 4
+    if shape == 'I' :
+        color = 5
+    if shape == 'T' :
+        color = 6
     newPiece = {'shape': shape,
                 'rotation': random.randint(0, len(PIECES[shape]) - 1),
                 'x': int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2),
                 'y': -2, # start it above the board (i.e. less than 0)
-                'color': random.randint(0, len(COLORS)-2)}
+                'color': color }
     return newPiece
 
 def getShadowPiece(original):
@@ -540,7 +553,7 @@ def getShadowPiece(original):
                 'rotation': original['rotation'],
                 'x': original['x'],
                 'y': original['y'], # start it above the board (i.e. less than 0)
-                'color': 5}
+                'color': 7}
     return newPiece
 
 def addToBoard(board, piece):
@@ -626,9 +639,7 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
         return
     if pixelx == None and pixely == None:
         pixelx, pixely = convertToPixelCoords(boxx, boxy)
-    pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely + 1, BOXSIZE - 1, BOXSIZE - 1))
-    pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, BOXSIZE - 4, BOXSIZE - 4))
-
+    pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 2, pixely + 2, BOXSIZE - 2, BOXSIZE - 2))
 
 def drawBoard(board):
     GRAY = (50,50,50)
@@ -686,7 +697,7 @@ def drawNextPiece(piece):
     nextRect.topleft = (WINDOWWIDTH - 120, 80)
     DISPLAYSURF.blit(nextSurf, nextRect)
     # draw the "next" piece
-    drawPiece(piece, pixelx=WINDOWWIDTH-100, pixely=100)
+    drawPiece(piece, pixelx=WINDOWWIDTH-110, pixely=100)
 
 def dumbmenu(screen, menu, x_pos = 100, y_pos = 100, font = None,
             size = 70, distance = 1.4, fgcolor = (255,255,255),
