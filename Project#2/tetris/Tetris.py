@@ -1,4 +1,4 @@
-import random, time, pygame, sys
+import random, time, pygame, sys, datetime
 from pygame.locals import *
 
 FPS = 25
@@ -8,12 +8,13 @@ BOXSIZE = 20
 BOARDWIDTH = 10
 BOARDHEIGHT = 20
 BLANK = '.'
-HIGHSCORE = 0
+HIGHSCORE = []
 MUTE = 0
+DIFF = 0
 
 file = open("highscore.txt", "r")
 for line in file:
-    HIGHSCORE = int(line)
+    HIGHSCORE += [int(line)]
 file.close()
 
 MOVESIDEWAYSFREQ = 0.15
@@ -156,9 +157,11 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, MIDFONT, HIGHSCORE, MUTE, BGCOLOR
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, MIDFONT, HIGHSCORE, MUTE, BGCOLOR, DIFF
     pygame.init()
     pygame.display.set_caption("TETRIS")
+    icon = pygame.image.load('logo.png')
+    pygame.display.set_icon(icon)
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     DISPLAYSURF.fill(BGCOLOR)
@@ -188,6 +191,19 @@ def main():
                             'Theme : ' + COLOR,
                             'Quit'], 160,250,None,30,1.4)
     if choose == 0 :
+        DISPLAYSURF.fill(BGCOLOR)
+        choose2 = dumbmenu(DISPLAYSURF, [
+                                'Easy',
+                                'Normal',
+                                'Hard',
+                                ], 150,200,None,30,1.4)
+        if choose2 == 0 :
+            DIFF = 0
+        elif choose2 == 1 :
+            DIFF = 1
+        elif choose2 == 2 :
+            DIFF = 2
+
         if MUTE == 0 :
             if random.randint(0, 1) == 0:
                 pygame.mixer.music.load('tetrisb.mid')
@@ -198,7 +214,7 @@ def main():
         pygame.mixer.music.stop()
         showTextScreen2('Game Over')
         file = open("highscore.txt", "w")
-        file.write(str(HIGHSCORE))
+        file.write(str(HIGHSCORE[0]) + '\n' + str(HIGHSCORE[1]) + '\n' + str(HIGHSCORE[2]) + '\n')
         file.close()
         main()
 
@@ -234,19 +250,29 @@ def main():
             main()
 
     elif choose == 2 :
-        text = "HIGHSCORE : " + str(HIGHSCORE)
+        text1 = "EASY HIGHSCORE : " + str(HIGHSCORE[0])
+        text2 = "NORMAL HIGHSCORE : " + str(HIGHSCORE[1])
+        text3 = "HARD HIGHSCORE : " + str(HIGHSCORE[2])
         DISPLAYSURF.fill(BGCOLOR)
-        sSurf, sRect = makeTextObjs(text, BASICFONT, TEXTCOLOR)
-        sRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
-        DISPLAYSURF.blit(sSurf, sRect)
+        eSurf, eRect = makeTextObjs(text1, BASICFONT, TEXTCOLOR)
+        nSurf, nRect = makeTextObjs(text2, BASICFONT, TEXTCOLOR)
+        hSurf, hRect = makeTextObjs(text3, BASICFONT, TEXTCOLOR)
+        eRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 90)
+        nRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 60)
+        hRect.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 30)
+        DISPLAYSURF.blit(eSurf, eRect)
+        DISPLAYSURF.blit(nSurf, nRect)
+        DISPLAYSURF.blit(hSurf, hRect)
         choose2 = dumbmenu(DISPLAYSURF, [
                                 'Reset',
                                 'Exit'], 160,350,None,30,1.4)
 
         if choose2 == 0 :
-            HIGHSCORE = 0
+            HIGHSCORE[0] = 0
+            HIGHSCORE[1] = 0
+            HIGHSCORE[2] = 0
             file = open("highscore.txt", "w")
-            file.write(str(HIGHSCORE))
+            file.write(str(HIGHSCORE[0]) + '\n' + str(HIGHSCORE[1]) + '\n' + str(HIGHSCORE[2]) + '\n')
             file.close()
             main()
         if choose2 == 1 :
@@ -419,8 +445,8 @@ def runGame():
                 # falling piece has landed, set it on the board
                 addToBoard(board, fallingPiece)
                 score += removeCompleteLines(board)
-                if HIGHSCORE < score :
-                    HIGHSCORE = score
+                if HIGHSCORE[DIFF] < score :
+                    HIGHSCORE[DIFF] = score
                 level, fallFreq = calculateLevelAndFallFreq(score)
                 fallingPiece = None
             else:
@@ -520,7 +546,13 @@ def calculateLevelAndFallFreq(score):
     # Based on the score, return the level the player is on and
     # how many seconds pass until a falling piece falls one space.
     level = int(score / 5) + 1
-    fallFreq = 0.27 - (level * 0.02)
+    fallFreq = 0.7 - (level * 0.02) - DIFF
+    if DIFF == 0 :
+        fallFreq = 0.5
+    if DIFF == 1 :
+        fallFreq = 0.27
+    if DIFF == 2 :
+        fallFreq = 0.1
     return level, fallFreq
 
 def getNewPiece():
@@ -673,7 +705,7 @@ def drawStatus(score, level):
     levelRect.topleft = (10, 20)
     DISPLAYSURF.blit(levelSurf, levelRect)
 
-    hsSurf = BASICFONT.render('Highscore: %s' % HIGHSCORE, True, TEXTCOLOR)
+    hsSurf = BASICFONT.render('Highscore: %s' % HIGHSCORE[DIFF], True, TEXTCOLOR)
     hsRect = hsSurf.get_rect()
     hsRect.topleft = (10, 80)
     DISPLAYSURF.blit(hsSurf, hsRect)
@@ -698,6 +730,12 @@ def drawNextPiece(piece):
     DISPLAYSURF.blit(nextSurf, nextRect)
     # draw the "next" piece
     drawPiece(piece, pixelx=WINDOWWIDTH-110, pixely=100)
+    # now = datetime.datetime.now()
+    # nowTime = now.strftime('%H:%M:%S')
+    # nextSurf = BASICFONT.render(nowTime, True, TEXTCOLOR)
+    # nextRect.topleft = (WINDOWWIDTH - 110, )
+    # DISPLAYSURF.blit(nextSurf, nextRect)
+
 
 def dumbmenu(screen, menu, x_pos = 100, y_pos = 100, font = None,
             size = 70, distance = 1.4, fgcolor = (255,255,255),
