@@ -137,7 +137,9 @@ Score 5점 당 레벨이 1씩 증가하며 Level이 올라갈수록 더욱 블�
 
 자세한 설명은 위키 참조
 
+### 출처
+* [Tetromino](https://github.com/asweigart/making-games-with-python-and-pygame/tree/master/tetromino)
+* [Dumpmenu](https://www.pygame.org/project/1425/2792)
 
 ### 피드백
-
 버그가 발견 될 시, Github 이슈나 이메일로 보내주세요. Email : twilightsvegas@gmail.com
